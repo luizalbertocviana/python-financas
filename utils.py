@@ -8,9 +8,9 @@ def yahoo_symbol(name: str) -> str:
     return name.upper() + '.SA'
 
 def how_close_to_low(stock):
-    high = float(stock['fiftyTwoWeekHigh'])
-    low = float(stock['fiftyTwoWeekLow'])
-    price = float(stock['previousClose'])
+    high  = stock['fiftyTwoWeekHigh']
+    low   = stock['fiftyTwoWeekLow']
+    price = stock['previousClose']
 
     length = high - low
     
@@ -65,7 +65,7 @@ def create_rank_dataframe(codes) -> pd.DataFrame :
     ]
     view_dataframe_summary_detail = dataframe_summary_detail[parameters_summary_details]
     view_dataframe_financial_data = dataframe_financial_data[parameters_financial_data]
-    view_dataframe_key_stats      =  dataframe_key_stats[parameters_key_stats]
+    view_dataframe_key_stats      = dataframe_key_stats[parameters_key_stats]
 
     data = pd.concat([view_dataframe_financial_data,
                       view_dataframe_key_stats,
@@ -74,31 +74,31 @@ def create_rank_dataframe(codes) -> pd.DataFrame :
 
     criteria = pd.DataFrame(index=data.index)
 
-    criteria['CTL'] = data.apply(how_close_to_low, axis='columns')
+    criteria['CTL']  = data.apply(how_close_to_low, axis='columns')
     criteria['SOFG'] = data.apply(beta_stable_or_fast_growing, axis='columns')
-    criteria['QR'] = data['quickRatio']
-    criteria['CR'] = data['currentRatio']
-    criteria['ROA'] = data['returnOnAssets']
-    criteria['ROE'] = data['returnOnEquity']
-    criteria['P/B'] = data['priceToBook']
-    criteria['P/E'] = data['trailingPE']
-    criteria['P/S'] = data['priceToSalesTrailing12Months']
-    criteria['DY'] = data['fiveYearAvgDividendYield']
-    criteria['DPR'] = data['payoutRatio']
+    criteria['QR']   = data['quickRatio']
+    criteria['CR']   = data['currentRatio']
+    criteria['ROA']  = data['returnOnAssets']
+    criteria['ROE']  = data['returnOnEquity']
+    criteria['P/B']  = data['priceToBook']
+    criteria['P/E']  = data['trailingPE']
+    criteria['P/S']  = data['priceToSalesTrailing12Months']
+    criteria['DY']   = data['fiveYearAvgDividendYield']
+    criteria['DPR']  = data['payoutRatio']
 
     rank = pd.DataFrame(index=data.index)
 
-    rank['CTL'] = criteria['CTL'].rank(na_option='bottom')
+    rank['CTL']  = criteria['CTL'].rank(na_option='bottom')
     rank['SOFG'] = criteria['SOFG'].rank(na_option='bottom', ascending=False)
-    rank['QR'] = criteria['QR'].rank(na_option='bottom', ascending=False)
-    rank['CR'] = criteria['CR'].rank(na_option='bottom', ascending=False)
-    rank['ROA'] = criteria['ROA'].rank(na_option='bottom', ascending=False)
-    rank['ROE'] = criteria['ROE'].rank(na_option='bottom', ascending=False)
-    rank['P/B'] = criteria['P/B'].rank(na_option='bottom')
-    rank['P/E'] = criteria['P/E'].rank(na_option='bottom')
-    rank['P/S'] = criteria['P/S'].rank(na_option='bottom')
-    rank['DY'] = criteria['DY'].rank(na_option='bottom', ascending=False)
-    rank['DPR'] = criteria['DPR'].rank(na_option='bottom')
+    rank['QR']   = criteria['QR'].rank(na_option='bottom', ascending=False)
+    rank['CR']   = criteria['CR'].rank(na_option='bottom', ascending=False)
+    rank['ROA']  = criteria['ROA'].rank(na_option='bottom', ascending=False)
+    rank['ROE']  = criteria['ROE'].rank(na_option='bottom', ascending=False)
+    rank['P/B']  = criteria['P/B'].rank(na_option='bottom')
+    rank['P/E']  = criteria['P/E'].rank(na_option='bottom')
+    rank['P/S']  = criteria['P/S'].rank(na_option='bottom')
+    rank['DY']   = criteria['DY'].rank(na_option='bottom', ascending=False)
+    rank['DPR']  = criteria['DPR'].rank(na_option='bottom')
 
     rank['sum'] = rank.sum(axis='columns')
 
